@@ -6,3 +6,11 @@ export async function getWallets(): Promise<Wallet[]> {
   const response: Wallet[] = await $fetch(`${baseURL}/api/wallets`)
   return response
 }
+
+export async function createWallet(wallet: Wallet): Promise<Wallet> {
+  const response: Wallet = await $fetch(`${baseURL}/api/wallets`, {
+    method: 'POST',
+    body: wallet,
+  })
+  return response
+}

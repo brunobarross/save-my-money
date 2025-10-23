@@ -23,12 +23,12 @@ export default defineNuxtConfig({
     devtools: true,
 
     /**
-     * These are the same options as the QueryClient 
-     * from @tanstack/vue-query, which will be passed 
+     * These are the same options as the QueryClient
+     * from @tanstack/vue-query, which will be passed
      * to the QueryClient constructor
      * More details: https://tanstack.com/query/v5/docs/reference/QueryClient
      */
-    
+
     queryClientOptions: {
       defaultOptions: {
         queries: {
@@ -41,4 +41,5 @@ export default defineNuxtConfig({
       },
     },
   },
+
 })

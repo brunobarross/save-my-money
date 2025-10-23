@@ -1,20 +1,23 @@
 <template>
-  <div class="grid grid-cols-12 gap-4">
-    <WalletCard v-for="i in WalletList" :key="i.id" :class="cardColsSpan" :name="i.name" :balance="i.balance" />
-  </div>
+  <UCarousel
+    v-slot="{ item }"
+    class="w-full max-w-max"
+    :items="WalletList"
+    :ui="{ item: 'basis-1/4', viewport: 'custom-viewport' }"
+    auto-height
+  >
+    <WalletCard :name="item.name" :balance="item.balance" />
+  </UCarousel>
 </template>
 
 <script setup lang="ts">
 import { requestWallets } from '@/components/wallet/wallet.queries'
-const props = defineProps({
-  rows: {
-    type: Number,
-    default: 3,
-  },
-})
-const cardColsSpan = computed(() => {
-  return `col-span-${12 / props.rows}`
-})
 
 const { data: WalletList } = requestWallets()
 </script>
+
+<style>
+.custom-viewport {
+  padding: 0.0625rem;
+}
+</style>
