@@ -26,11 +26,13 @@ const items: NavigationMenuItem[][] = [
     {
       label: "Home",
       icon: "i-lucide-house",
-      active: true,
+      to: "/",
+
     },
     {
       label: "Carteiras",
-      icon: "i-lucide-inbox",
+      icon: "i-lucide-wallet",
+      to: "/wallet",
     },
   ],
 ];

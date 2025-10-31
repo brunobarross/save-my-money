@@ -14,3 +14,12 @@ export async function createWallet(wallet: Wallet): Promise<Wallet> {
   })
   return response
 }
+
+
+export async function deleteWallet(walletId: number | undefined){
+  const response = await $fetch(`${baseURL}/api/wallets/${walletId}`, {
+    method: 'DELETE',
+  })
+
+  return response
+}

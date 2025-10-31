@@ -4,7 +4,7 @@
       <h1 class="text-2xl font-semibold">Bem vindo, fulano!</h1>
       <WalletModal />
     </div>
-    <WalletList class="pt-6" />
+    <WalletListCarousel class="pt-6 " />
     <div class="mt-6 grid grid-cols-12 gap-6">
       <HomeLastTransactions class="col-span-6" />
       <HomeTotalMoney class="col-span-6" />

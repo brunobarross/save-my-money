@@ -1,7 +1,7 @@
 export interface Wallet {
   id?: number;
   name: string;
-  balance: number;
+  balance: string;
 }
 
 export const enum Queries {

@@ -1,9 +1,13 @@
 <template>
-  <ul>
-    <li v-for="item in WalletList" :key="item.id">
-      <WalletCard can-delete class="mt-4 w-full" :wallet="item" />
-    </li>
-  </ul>
+  <UCarousel
+    v-slot="{ item }"
+    class="w-full "
+    :items="WalletList"
+    :ui="{ item: 'basis-1/4', viewport: 'custom-viewport' }"
+    auto-height
+  >
+    <WalletCard :wallet="item" :can-delete="false" />
+  </UCarousel>
 </template>
 
 <script setup lang="ts">
@@ -15,5 +19,6 @@ const { data: WalletList } = requestWallets(5 * 60 * 1000)
 <style>
 .custom-viewport {
   padding: 0.0625rem;
+  width: 100%;
 }
 </style>
