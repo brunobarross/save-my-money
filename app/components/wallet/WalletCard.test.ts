@@ -1,5 +1,5 @@
 // @noErrors
-import { describe, expect, it, vi } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   mockNuxtImport,
   mountSuspended,
@@ -27,23 +27,22 @@ const mockToast = vi.fn();
 const mockMutateAsync = vi.fn();
 const mockInvalidateQueries = vi.fn();
 
+const mockMutationValues = {
+  isSucces: false,
+  isError: false,
+};
+
 mockNuxtImport("useOverlay", () => {
   return () => {
     return { create: mockOverlayCreate };
   };
 });
 
-mockNuxtImport("useToast", () => {
-  return () => {
-    return { add: mockToast };
-  };
-});
-
 vi.mock("@/components/wallet/wallet.queries", () => ({
   removeWallet: () => ({
     mutateAsync: mockMutateAsync,
-    isSuccess: { value: false },
-    isError: { value: false },
+    isSuccess: { value: mockMutationValues.isSucces },
+    isError: { value: mockMutationValues.isError },
   }),
 }));
 
@@ -54,6 +53,11 @@ vi.mock("@tanstack/vue-query", () => ({
 }));
 
 describe("WalletCard", () => {
+  beforeAll(()=>{
+    vi.clearAllMocks()
+    mockMutationValues.isError = false
+    mockMutationValues.isSucces = false
+  })
   it("should show the name and balance correctly", async () => {
     const component = await mountSuspended(WalletCard, {
       props: {
@@ -70,6 +74,8 @@ describe("WalletCard", () => {
   });
 
   it("should exist delete button if canDelete is true", async () => {
+    mockMutationValues.isSucces = false;
+    mockMutationValues.isError = true;
     const component = await mountSuspended(WalletCard, {
       props: {
         canDelete: false,
@@ -107,11 +113,28 @@ describe("WalletCard", () => {
       title: `Deseja remover a carteira "${mockWallet.name}" ?`,
     });
   });
-  it("shoud called delete, invalidate queries and close modal on sucess", async()=>{
-    mockMutateAsync.mockResolvedValueOnce({})
+
+  it("should show error toast on failed", async () => {
+    mockMutationValues.isSucces = false;
+    mockMutationValues.isError = true;
+    mockMutateAsync.mockResolvedValueOnce({});
     const mockCallback = mockOverlayCreate?.mock.calls[0][1].props.onAccept;
-    await mockCallback()
+    await mockCallback();
+    expect(mockMutateAsync).toHaveBeenCalledWith(mockWallet.id);
+    expect(mockToast).toHaveBeenCalledWith({
+      color: "error",
+      title: "Ocorreu um erro ao deletar esta carteira!",
+    });
+  });
+
+  it("should called delete, invalidate queries and close modal on sucess", async () => {
+    mockMutationValues.isSucces = true;
+    mockMutationValues.isError = false;
+    mockMutateAsync.mockResolvedValueOnce({});
+    const mockCallback = mockOverlayCreate?.mock.calls[0][1].props.onAccept;
+    await mockCallback();
     expect(mockMutateAsync).toHaveBeenCalledWith(mockWallet.id);
     expect(mockInvalidateQueries).toHaveBeenCalledTimes(1);
-  })
+    expect(mockModalClose).toHaveBeenCalledTimes(1);
+  });
 });
