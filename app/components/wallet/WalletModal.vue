@@ -1,6 +1,5 @@
 <template>
-  <UModal v-model:open="isOpen" title="Nova Carteira">
-    <UButton label="Nova carteira" size="md" class="cursor-pointer" />
+  <UModal title="Nova Carteira">
     <template #body>
       <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
         <UFormField label="Nome" name="name">
@@ -8,13 +7,7 @@
         </UFormField>
 
         <UFormField label="Orçamento" name="balance">
-          <UInput
-            v-model="state.balance"
-            v-maska="'#,##0.00'"
-            data-maska-reversed
-            class="w-full"
-            size="lg"
-          />
+          <UInput v-model="state.balance" class="w-full" size="lg" type="number" />
         </UFormField>
 
         <UButton class="w-full mt-4 justify-center cursor-pointer" type="submit" size="lg"
@@ -30,47 +23,38 @@ import { createNewWallet } from '@/components/wallet/wallet.queries'
 import * as v from 'valibot'
 import { useQueryClient } from '@tanstack/vue-query'
 import { Queries } from '@/components/wallet/wallet.types'
-import { vMaska } from 'maska/vue'
-
+const props = defineProps<{
+  onSave: () => void
+  type: string
+}>()
 type Schema = v.InferOutput<typeof schema>
 
 const queryClient = useQueryClient()
 const { mutateAsync, isSuccess, isError } = createNewWallet()
 const state = reactive({
-  name: '',
-  balance: '',
+  name: 'Salário Outubro',
+  balance: 4900,
 })
 const schema = v.object({
   name: v.pipe(v.string()),
-  balance: v.pipe(v.string()),
+  balance: v.pipe(v.number()),
 })
-
-const isOpen = ref(false)
 
 const toast = useToast()
 
-function closeModal() {
-  isOpen.value = false
-}
-
-function cleanBalanceString(balance: string) {
-  return balance.replace(/\.(?![^.]*$)/g, '')
-}
-
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
-    await mutateAsync({
-      name: event.data.name,
-      balance: cleanBalanceString(event.data.balance),
-    })
+    await mutateAsync(event.data)
     if (isError.value) throw new Error('Error!')
-    if (isSuccess.value) {
-      queryClient.invalidateQueries({ queryKey: [Queries.FETCH_WALLETS] })
-      closeModal()
-    }
+    if (isSuccess.value) queryClient.invalidateQueries({ queryKey: [Queries.FETCH_WALLETS] })
+    toast.add({title: "Carteira criada com sucesso!"})
   } catch (error) {
-    toast.add({ title: 'Ocorreu um erro ao criar uma nova carteira!', color: 'error' })
     console.log(error)
+    toast.add({title: "Ocorreu um erro ao criar a carteira!"})
+  } finally {
+    props.onSave()
   }
 }
+
+
 </script>

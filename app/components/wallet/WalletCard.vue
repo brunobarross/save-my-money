@@ -1,12 +1,13 @@
 <template>
-  <UCard>
+  <UCard data-testid="wallet-card">
     <div class="flex items-center justify-between">
       <div class="flex flex-col">
-        <h3 class="text-sm">{{ wallet.name }}</h3>
-        <p class="text-lg font-medium mt-1">{{ wallet.balance }}</p>
+        <h3 data-testid="wallet-card-name"  class="text-sm">{{ wallet.name }}</h3>
+        <p data-testid="wallet-card-balance" class="text-lg font-medium mt-1">{{ wallet.balance }}</p>
       </div>
       <UButton
         v-if="canDelete"
+        data-testid="wallet-card-delete"
         icon="i-lucide-trash-2"
         size="sm"
         color="error"
