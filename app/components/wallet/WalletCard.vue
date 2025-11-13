@@ -1,18 +1,18 @@
 <template>
-  <UCard data-testid="wallet-card">
+  <UCard>
     <div class="flex items-center justify-between">
       <div class="flex flex-col">
-        <h3 data-testid="wallet-card-name"  class="text-sm">{{ wallet.name }}</h3>
-        <p data-testid="wallet-card-balance" class="text-lg font-medium mt-1">{{ wallet.balance }}</p>
+        <h3 class="text-sm" data-testid="wallet-card-name">{{ wallet.name }}</h3>
+        <p class="text-lg font-medium mt-1" data-testid="wallet-card-balance">{{ wallet.balance }}</p>
       </div>
       <UButton
         v-if="canDelete"
-        data-testid="wallet-card-delete"
         icon="i-lucide-trash-2"
         size="sm"
         color="error"
         variant="outline"
         class="cursor-pointer"
+        data-testid="wallet-card-delete-button"
         @click="openDeleteModal"
       />
     </div>
