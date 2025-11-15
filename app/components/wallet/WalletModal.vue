@@ -33,11 +33,11 @@ const queryClient = useQueryClient()
 const { mutateAsync} = createNewWallet()
 const state = reactive({
   name: 'Salário Outubro',
-  balance: 4900,
+  balance: "4900",
 })
 const schema = v.object({
   name: v.pipe(v.string()),
-  balance: v.pipe(v.number()),
+  balance: v.pipe(v.string()),
 })
 
 const toast = useToast()

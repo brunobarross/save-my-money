@@ -37,7 +37,7 @@ interface Props {
   canDelete: boolean;
 }
 const props = defineProps<Props>();
-const { mutateAsync, isSuccess, isError } = removeWallet();
+const { mutateAsync} = removeWallet();
 const overlay = useOverlay();
 const toast = useToast();
 const modal = overlay.create(UiAppModalBase, {
