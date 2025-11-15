@@ -11,19 +11,19 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.20.0]
+        bun-version: [22.20.0]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          bun-version: ${{ matrix.bun-version }}
 
       - name: Install dependencies
-        run: npm install
+        run: bun install
 
       - name: Run tests
         run: npx vitest
