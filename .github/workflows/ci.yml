@@ -2,7 +2,7 @@
 name: Save My Money CI
 
 on:
-  pull_request:
+  push:
     branches: [main]
 
 jobs:
