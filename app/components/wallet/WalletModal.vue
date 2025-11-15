@@ -30,7 +30,7 @@ const props = defineProps<{
 type Schema = v.InferOutput<typeof schema>
 
 const queryClient = useQueryClient()
-const { mutateAsync, isSuccess, isError } = createNewWallet()
+const { mutateAsync} = createNewWallet()
 const state = reactive({
   name: 'Salário Outubro',
   balance: 4900,
@@ -45,8 +45,7 @@ const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     await mutateAsync(event.data)
-    if (isError.value) throw new Error('Error!')
-    if (isSuccess.value) queryClient.invalidateQueries({ queryKey: [Queries.FETCH_WALLETS] })
+    queryClient.invalidateQueries({ queryKey: [Queries.FETCH_WALLETS] })
     toast.add({title: "Carteira criada com sucesso!"})
   } catch (error) {
     console.log(error)

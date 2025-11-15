@@ -1,5 +1,5 @@
 // @noErrors
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { mockNuxtImport, mountSuspended, renderSuspended } from '@nuxt/test-utils/runtime'
 import { WalletCard } from '#components'
 import type { Wallet } from '~/components/wallet/wallet.types'
@@ -88,17 +88,17 @@ describe('WalletCard', () => {
         wallet: mockWallet,
       },
     })
-    expect(component.find('[data-testid="wallet-card-delete"]').exists()).toBe(true)
+    expect(component.find('[data-testid="wallet-card-delete-button"]').exists()).toBe(true)
   })
 
-  it('should open the modal delete visuavisuaon click delete button', async () => {
-    renderSuspended(WalletCard, {
+  it('should open the modal delete visible on click delete button', async () => {
+    await renderSuspended(WalletCard, {
       props: {
         canDelete: true,
         wallet: mockWallet,
       },
     })
-    const deleteBtn = screen.getByTestId('wallet-card-delete')
+    const deleteBtn = screen.getByTestId('wallet-card-delete-button')
     await fireEvent.click(deleteBtn)
     expect(mockOpenDeleteModal).toHaveBeenCalledTimes(1)
     expect(mockOpenDeleteModal).toHaveBeenCalledWith({
@@ -110,7 +110,7 @@ describe('WalletCard', () => {
     mockMutateAsync.mockRejectedValueOnce(new Error())
     const mockCallback = mockOverlayCreate?.mock.calls[0][1].props.onAccept
     await mockCallback()
-    expect(mockMutateAsync).toHaveBeenCalledWith(mockWallet.id)nem
+    expect(mockMutateAsync).toHaveBeenCalledWith(mockWallet.id)
     expect(mockToast).toHaveBeenCalledWith({
       title: 'Ocorreu um erro ao deletar esta carteira!',
       color: 'error',
@@ -124,7 +124,7 @@ describe('WalletCard', () => {
         wallet: mockWallet,
       },
     })
-    const deleteBtn = screen.getByTestId('wallet-card-delete')
+    const deleteBtn = screen.getByTestId('wallet-card-delete-button')
     await fireEvent.click(deleteBtn)
     mockMutateAsync.mockResolvedValueOnce({})
     const mockCallback = mockOverlayCreate?.mock.calls[0][1].props.onAccept
