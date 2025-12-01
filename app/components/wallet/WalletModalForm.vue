@@ -1,5 +1,5 @@
 <template>
-  <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+  <UForm :schema="schema" :state="state" class="space-y-4"  @submit="onSubmit">
     <UFormField label="Nome" name="name" required>
       <UInput v-model="state.name" class="w-full" size="lg" data-testid="wallet-modal-input-name" required />
     </UFormField>
@@ -46,8 +46,8 @@ const state = reactive({
 const schema = v.object({
   name: v.pipe(
     v.string("O nome deve ser um texto."),
-    v.minLength(1, "Por favor, insira um nome."),
-    v.empty("O campo não pode estar vazio!")
+    v.trim(),
+    v.minLength(1, "Por favor, insira um nome.")
   ),
   balance: v.pipe(
     v.string("O orçamento deve ser um texto."),
